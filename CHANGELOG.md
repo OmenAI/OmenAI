@@ -13,3 +13,4 @@
 - Zod config validation — fails fast on bad env
 - Docker + docker-compose for containerised deployment
 - Full test suite: signal building, filtering, sizing, tracking
+
