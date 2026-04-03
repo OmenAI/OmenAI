@@ -140,3 +140,4 @@ export class PositionManager {
     return this.getOpen().reduce((sum, p) => sum + p.unrealizedPnl, 0);
   }
 }
+
