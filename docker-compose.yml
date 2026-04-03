@@ -10,3 +10,4 @@ services:
       - DRY_RUN=true
     volumes:
       - ./data:/app/data
+
