@@ -22,3 +22,4 @@ Calibration principles:
 - Account for the possibility that the market is already correctly priced
 
 Your predictions feed into a Kelly criterion position sizer. Be honest about uncertainty.`;
+
