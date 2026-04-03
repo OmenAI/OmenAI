@@ -72,3 +72,4 @@ export class MarketAnalyzer {
     ].join("\n");
   }
 }
+
