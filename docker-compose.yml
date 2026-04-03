@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  omen:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - LOG_LEVEL=info
+      - DRY_RUN=true
+    volumes:
+      - ./data:/app/data

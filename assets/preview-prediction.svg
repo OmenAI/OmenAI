@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="540" viewBox="0 0 820 540">
+  <defs>
+    <style>text { font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace; }</style>
+    <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#080b0f"/>
+    </linearGradient>
+    <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3fb950" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#3fb950" stop-opacity="0.02"/>
+    </linearGradient>
+    <linearGradient id="polyFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#58a6ff" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#58a6ff" stop-opacity="0.02"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="1" y="1" width="818" height="538" rx="10" fill="none" stroke="#21262d" stroke-width="1.5"/>
+  <rect width="820" height="540" rx="10" fill="url(#bg2)"/>
+
+  <!-- Header -->
+  <rect width="820" height="44" rx="10" fill="#111827"/>
+  <rect y="34" width="820" height="10" fill="#111827"/>
+  <circle cx="22" cy="22" r="7" fill="#ff5f57"/>
+  <circle cx="44" cy="22" r="7" fill="#febc2e"/>
+  <circle cx="66" cy="22" r="7" fill="#28c840"/>
+  <text x="410" y="27" text-anchor="middle" fill="#6b7280" font-size="12" letter-spacing="2">OMEN  ·  PREDICTION DETAIL</text>
+
+  <!-- Market title -->
+  <text x="28" y="72" fill="#e6edf3" font-size="15" font-weight="bold">Will Trump sign the crypto bill before July 2026?</text>
+  <rect x="28" y="80" width="72" height="15" rx="3" fill="#1f3a5c"/>
+  <text x="64" y="91" fill="#58a6ff" font-size="10" text-anchor="middle">Politics</text>
+  <rect x="108" y="80" width="100" height="15" rx="3" fill="#1a3a2a"/>
+  <text x="158" y="91" fill="#3fb950" font-size="10" text-anchor="middle">US Crypto Policy</text>
+  <text x="792" y="72" fill="#8b949e" font-size="11" text-anchor="end">closes Jul 1, 2026  ·  $2.1M volume</text>
+
+  <!-- Probability comparison -->
+  <rect x="16" y="104" width="370" height="100" rx="6" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="28" y="122" fill="#484f58" font-size="10" letter-spacing="1">PROBABILITY</text>
+
+  <!-- Polymarket bar -->
+  <text x="28" y="143" fill="#58a6ff" font-size="11">Polymarket</text>
+  <rect x="120" y="132" width="200" height="14" rx="3" fill="#1c2128"/>
+  <rect x="120" y="132" width="68" height="14" rx="3" fill="#58a6ff" opacity="0.7"/>
+  <text x="330" y="143" fill="#58a6ff" font-size="12" font-weight="bold">34%</text>
+
+  <!-- AI bar -->
+  <text x="28" y="167" fill="#3fb950" font-size="11">Omen AI</text>
+  <rect x="120" y="156" width="200" height="14" rx="3" fill="#1c2128"/>
+  <rect x="120" y="156" width="102" height="14" rx="3" fill="#3fb950" opacity="0.7"/>
+  <text x="330" y="167" fill="#3fb950" font-size="12" font-weight="bold">51%</text>
+
+  <!-- Edge -->
+  <text x="28" y="192" fill="#484f58" font-size="11">Edge</text>
+  <rect x="120" y="181" width="200" height="14" rx="3" fill="#1c2128"/>
+  <rect x="120" y="181" width="34" height="14" rx="3" fill="#f0883e" opacity="0.8"/>
+  <text x="330" y="192" fill="#f0883e" font-size="12" font-weight="bold">+17%</text>
+
+  <!-- Position panel -->
+  <rect x="402" y="104" width="402" height="100" rx="6" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+  <text x="414" y="122" fill="#484f58" font-size="10" letter-spacing="1">POSITION</text>
+  <text x="414" y="143" fill="#8b949e" font-size="11">Side:</text>
+  <rect x="454" y="131" width="30" height="15" rx="3" fill="#1a3a2a"/>
+  <text x="469" y="143" fill="#3fb950" font-size="11" text-anchor="middle">YES</text>
+  <text x="520" y="143" fill="#8b949e" font-size="11">Size: $124 (Kelly: 12.4%)</text>
+  <text x="414" y="163" fill="#8b949e" font-size="11">Entry price:</text>
+  <text x="510" y="163" fill="#e6edf3" font-size="11">$0.34</text>
+  <text x="570" y="163" fill="#8b949e" font-size="11">Current:</text>
+  <text x="628" y="163" fill="#3fb950" font-size="11">$0.38</text>
+  <text x="414" y="183" fill="#8b949e" font-size="11">Unrealized P&amp;L:</text>
+  <text x="540" y="183" fill="#3fb950" font-size="12" font-weight="bold">+$14.59 (+11.8%)</text>
+  <text x="414" y="200" fill="#484f58" font-size="10">Confidence: 0.74  ·  Opened: 6d ago</text>
+
+  <!-- Probability chart -->
+  <rect x="16" y="216" width="788" height="140" rx="6" fill="#161b22" stroke="#21262d" stroke-width="1"/>
+  <text x="28" y="234" fill="#484f58" font-size="10" letter-spacing="1">PROBABILITY OVER TIME  (30d)</text>
+
+  <!-- Chart grid lines -->
+  <line x1="28" y1="244" x2="790" y2="244" stroke="#21262d" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="28" y1="264" x2="790" y2="264" stroke="#21262d" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="28" y1="284" x2="790" y2="284" stroke="#21262d" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="28" y1="304" x2="790" y2="304" stroke="#21262d" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="28" y1="324" x2="790" y2="324" stroke="#21262d" stroke-width="1" stroke-dasharray="4,4"/>
+  <text x="12" y="248" fill="#484f58" font-size="9" text-anchor="end">60%</text>
+  <text x="12" y="268" fill="#484f58" font-size="9" text-anchor="end">50%</text>
+  <text x="12" y="288" fill="#484f58" font-size="9" text-anchor="end">40%</text>
+  <text x="12" y="308" fill="#484f58" font-size="9" text-anchor="end">30%</text>
+  <text x="12" y="328" fill="#484f58" font-size="9" text-anchor="end">20%</text>
+
+  <!-- Polymarket line (blue) — starts at 38%, dips to 25%, recovers to 34% -->
+  <polyline points="28,292 104,308 180,316 256,320 332,316 408,312 484,308 560,304 636,300 712,296 790,296"
+    fill="none" stroke="#58a6ff" stroke-width="2" opacity="0.7"/>
+  <!-- AI line (green) — starts at 48%, dips to 42%, recovers to 51% -->
+  <polyline points="28,272 104,280 180,284 256,280 332,276 408,272 484,268 560,264 636,260 712,258 790,254"
+    fill="none" stroke="#3fb950" stroke-width="2"/>
+
+  <!-- Entry marker -->
+  <circle cx="560" cy="264" r="5" fill="#f0883e"/>
+  <line x1="560" y1="248" x2="560" y2="340" stroke="#f0883e" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/>
+  <text x="558" y="245" fill="#f0883e" font-size="9" text-anchor="middle">entry</text>
+
+  <!-- Chart legend -->
+  <circle cx="652" cy="232" r="4" fill="#3fb950"/>
+  <text x="660" y="236" fill="#3fb950" font-size="10">Omen AI</text>
+  <circle cx="720" cy="232" r="4" fill="#58a6ff"/>
+  <text x="728" y="236" fill="#58a6ff" font-size="10">Polymarket</text>
+
+  <!-- AI Reasoning -->
+  <rect x="16" y="368" width="788" height="110" rx="6" fill="#161b22" stroke="#21262d" stroke-width="1"/>
+  <text x="28" y="386" fill="#484f58" font-size="10" letter-spacing="1">CLAUDE AGENT REASONING</text>
+  <line x1="16" y1="392" x2="804" y2="392" stroke="#21262d" stroke-width="1"/>
+  <text x="28" y="410" fill="#8b949e" font-size="11">"The crypto bill has strong bipartisan Senate support (64 co-sponsors as of March 2026) and the White House</text>
+  <text x="28" y="426" fill="#8b949e" font-size="11">has signaled willingness to sign. Polymarket at 34% appears to be discounting the accelerated legislative</text>
+  <text x="28" y="442" fill="#8b949e" font-size="11">timeline. Recent committee approval adds urgency. Key risk: floor vote scheduling uncertainty. My estimate</text>
+  <text x="28" y="458" fill="#8b949e" font-size="11">of 51% reflects the positive legislative momentum that the market has not yet priced in."</text>
+  <text x="28" y="474" fill="#484f58" font-size="10">Sources: Congressional record · News feed · Resolution criteria · Historical base rate for similar bills</text>
+
+  <!-- Footer -->
+  <rect x="0" y="492" width="820" height="24" rx="0" fill="#0a0e14"/>
+  <rect x="0" y="492" width="820" height="1" fill="#21262d"/>
+  <rect x="0" y="530" width="820" height="10" rx="10" fill="#0a0e14"/>
+  <text x="28" y="508" fill="#484f58" font-size="10">Claude Sonnet 4.5  ·  Polymarket CLOB API  ·  Kelly criterion sizing  ·  Bun 1.2</text>
+  <text x="792" y="508" fill="#484f58" font-size="10" text-anchor="end">github.com/OmenLabs/omen</text>
+</svg>
