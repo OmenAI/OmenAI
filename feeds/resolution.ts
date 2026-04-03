@@ -61,3 +61,4 @@ export function analyzeResolution(market: Market): ResolutionContext {
     flags,
   };
 }
+
