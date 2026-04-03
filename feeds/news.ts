@@ -72,3 +72,4 @@ export class NewsFeed {
     this.cache.clear();
   }
 }
+
