@@ -63,3 +63,4 @@ export function kellySize(signal: MarketSignal, bankrollUsd: number): SizeResult
 
   return { fraction, contractQty, dollarSize, cappedByRisk };
 }
+
