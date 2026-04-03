@@ -169,3 +169,4 @@ describe("PredictionTracker", () => {
     expect(stats.accuracy).toBeCloseTo(0.5);
   });
 });
+
