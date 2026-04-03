@@ -82,3 +82,4 @@ export interface ScanCycle {
   positionsOpened: number;
   paperTrading: boolean;
 }
+
