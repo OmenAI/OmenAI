@@ -26,3 +26,4 @@ export function buildSignal(
     scoredAt: Date.now(),
   };
 }
+
