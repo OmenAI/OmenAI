@@ -49,3 +49,4 @@ Tests live in `tests/`. Run with `bun run test`. Coverage includes:
 - Zod validation at config boundaries
 - No mocks in tests — pure unit tests on deterministic logic
 - Structured logging via `createLogger(namespace)`
+
