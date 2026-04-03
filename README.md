@@ -3,7 +3,7 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)
 ![Bun](https://img.shields.io/badge/Bun-1.2-black)
-![Claude](https://img.shields.io/badge/Claude-Opus%204.6-orange)
+
 
 **Autonomous prediction market analyst.** Omen scans Polymarket, finds mispriced probabilities, and uses Claude to reason over news and resolution criteria — then sizes positions using the Kelly criterion.
 
