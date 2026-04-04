@@ -183,11 +183,13 @@ export class OracleAgent {
 
       case "get_historical_accuracy": {
         // Returns mock accuracy stats — in production, query prediction history
+        // Brier score per category drives the confidence penalty in Kelly sizing
         return {
           category: String(input["category"]),
           totalPredictions: 47,
           accuracy: 0.714,
           avgEdge: 12.3,
+          brierScore: 0.18,
           note: "Based on last 90 days of resolved markets",
         };
       }
