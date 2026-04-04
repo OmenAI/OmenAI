@@ -9,17 +9,23 @@ const ConfigSchema = z.object({
   NEWSAPI_KEY: z.string().optional(),
 
   // Market filters
-  MIN_LIQUIDITY_USD: z.coerce.number().default(10_000),
+  MIN_LIQUIDITY_USD: z.coerce.number().default(2_000),  // $2k minimum — Kelly blows up below this
   MIN_DAYS_TO_CLOSE: z.coerce.number().default(3),
   MAX_DAYS_TO_CLOSE: z.coerce.number().default(180),
+  // No-trade window before resolution: spread widens unpredictably in final hours
+  NO_TRADE_WINDOW_HOURS: z.coerce.number().default(2),
+  // Max open positions sharing same resolution dependency before correlation penalty applies
+  CORRELATION_CLUSTER_MAX: z.coerce.number().default(3),
 
   // Edge / confidence thresholds
   MIN_EDGE_PCT: z.coerce.number().default(8),
   CONFIDENCE_THRESHOLD: z.coerce.number().default(0.6),
 
   // Position sizing
-  KELLY_FRACTION: z.coerce.number().default(0.5),
-  MAX_POSITION_PCT: z.coerce.number().default(5), // max % of bankroll per trade
+  // Fractional Kelly multiplier. Live Brier data shows 0.5× overbets in
+  // high-variance political markets — reduced to 0.15× for tighter variance control.
+  KELLY_FRACTION: z.coerce.number().default(0.15),
+  MAX_POSITION_PCT: z.coerce.number().default(3), // hard cap: max % of bankroll per trade
   PAPER_BANKROLL_USD: z.coerce.number().default(1000),
 
   // Scan loop
