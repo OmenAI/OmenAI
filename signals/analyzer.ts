@@ -27,6 +27,12 @@ export class MarketAnalyzer {
       return { pass: false, reason: `Price ${(market.yesPrice * 100).toFixed(0)}% — near certainty, skip` };
     }
 
+    // No-trade window: skip markets resolving within NO_TRADE_WINDOW_HOURS
+    const hoursToClose = (market.endDate - Date.now()) / (60 * 60 * 1000);
+    if (hoursToClose < config.NO_TRADE_WINDOW_HOURS) {
+      return { pass: false, reason: `Resolves in ${hoursToClose.toFixed(1)}h — inside no-trade window` };
+    }
+
     return { pass: true, reason: "Passed pre-filter" };
   }
 
