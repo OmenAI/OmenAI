@@ -16,11 +16,22 @@ export interface SizeResult {
  *
  * Kelly formula for binary markets:
  *   f* = (b·p - q) / b
- *   where b = odds (payout per $1 risked), p = win probability, q = 1 - p
+ *   where b = (1 - fee) / fee for binary markets, p = win probability, q = 1 - p
  *
- * We use fractional Kelly (default: 0.5×) to reduce variance.
+ * Fractional Kelly at 0.15× (reduced from 0.5× — live Brier data showed
+ * systematic overbetting in high-variance political and crypto markets).
+ *
+ * Correlation penalty: if ≥3 open positions share the same resolution event,
+ * apply an additional 0.6× multiplier to new positions in that cluster.
  */
-export function kellySize(signal: MarketSignal, bankrollUsd: number): SizeResult {
+export function kellySize(signal: MarketSignal, bankrollUsd: number, liquidityUsd = Infinity): SizeResult {
+  // Liquidity gate: Kelly output is meaningless if we can't actually fill.
+  // $2,000 minimum — below this the spread is too wide for reliable pricing.
+  const MIN_LIQUIDITY = 2_000;
+  if (liquidityUsd < MIN_LIQUIDITY) {
+    log.debug("Skipping sizing — insufficient liquidity", { liquidityUsd, marketId: signal.marketId });
+    return { fraction: 0, contractQty: 0, dollarSize: 0, cappedByRisk: false };
+  }
   const p = Math.min(Math.max(signal.aiPct / 100, 0.01), 0.99);
   const q = 1 - p;
 
