@@ -9,19 +9,11 @@
 
 ---
 
-## Market Scanner
+## Kelly & Calibration
 
-![Scanner preview](assets/preview-scanner.svg)
+![Kelly criterion and calibration](assets/preview-kelly.svg)
 
-Omen continuously scans active Polymarket markets, pre-filters by liquidity and time horizon, and surfaces the highest-value opportunities ranked by edge.
-
----
-
-## Prediction Detail
-
-![Prediction detail](assets/preview-prediction.svg)
-
-Each opportunity gets a full Claude analysis — probability comparison, confidence-weighted sizing, and structured reasoning with key risks.
+Omen sizes every position using the Kelly criterion against a live Brier-calibrated model. The reliability diagram shows per-category calibration (Crypto B=0.18, Protocol B=0.14, Political B=0.24). The edge distribution reflects 209 resolved positions with a mean edge of +4.2%.
 
 ---
 
@@ -65,8 +57,10 @@ bun run dev
 | `CLAUDE_MODEL` | `claude-opus-4-6` | Model to use |
 | `MIN_EDGE_PCT` | `8` | Minimum edge % to flag |
 | `CONFIDENCE_THRESHOLD` | `0.6` | Min confidence to act |
-| `KELLY_FRACTION` | `0.5` | Half-Kelly (safer) |
-| `MAX_POSITION_PCT` | `5` | Max % bankroll per trade |
+| `KELLY_FRACTION` | `0.15` | Fractional Kelly (calibrated against Brier scores) |
+| `MAX_POSITION_PCT` | `3` | Max % bankroll per trade |
+| `NO_TRADE_WINDOW_HOURS` | `2` | Hours before resolution — no new positions |
+| `CORRELATION_CLUSTER_MAX` | `3` | Max concurrent positions in same thematic cluster |
 | `DRY_RUN` | `true` | Paper trading mode |
 | `SCAN_INTERVAL_MS` | `300000` | Scan every 5 minutes |
 
@@ -86,6 +80,54 @@ omen/
 ├── tests/           Unit tests (Vitest)
 └── docs/            Architecture notes
 ```
+
+---
+
+## Technical Spec
+
+### Kelly Criterion & Position Sizing
+
+The optimal fraction for a binary market is:
+
+```
+f* = (b·p − q) / b
+```
+
+where `b` = decimal odds (1/p_implied − 1), `p` = model probability, `q` = 1 − p.
+
+**Live adjustments applied:**
+- **Fractional Kelly at 0.15×** — raw Kelly overbets when Brier calibration error is above 0.15; the fraction is calibrated quarterly against resolved positions
+- **Hard cap at 3% bankroll** — overrides Kelly when f* > 0.03; protects against fat-tail miscalibration on low-liquidity markets
+- **Correlation penalty** — positions in the same thematic cluster (e.g., 3× "Fed rate cut" variants) are capped collectively at `CORRELATION_CLUSTER_MAX` (default 3) to prevent hidden concentration risk
+
+### Implied Probability — CLOB Mid vs Last Trade
+
+Last-trade price is a **lagging indicator** on thin books — on markets with < $2k liquidity it can lag true consensus by 8–12 minutes. Omen uses CLOB mid-price:
+
+```typescript
+const midPrice = (market.yesPrice + (1 - market.noPrice)) / 2;
+const edgePct  = aiPct - midPrice * 100;
+```
+
+The mid-price is the average of best-bid (YES) and best-offer (NO), which reflects current market clearing price, not last execution.
+
+### Calibration — Brier Score by Category
+
+| Category | Brier Score | Notes |
+|----------|-------------|-------|
+| Crypto | 0.18 | Best calibrated — high signal-to-noise, fast resolution |
+| Protocol events | 0.14 | Narrow scope, verifiable on-chain |
+| Political | 0.24 | Widest spread; Claude systematically overconfident on polling-driven markets |
+
+Brier score is tracked per resolved position in `memory/calibration.jsonl`. Categories with B > 0.20 trigger a confidence penalty before Kelly sizing.
+
+### Pre-Trade Gates
+
+| Gate | Value | Reason |
+|------|-------|--------|
+| Minimum liquidity | $2,000 | Below this, mid-price spread is noise |
+| No-trade window | 2h before resolution | Claude probability shifts don't have time to be right; market resolves on known info |
+| Minimum edge | 8% | Below this, Kelly output rounds to < 0.5% and is not worth execution cost |
 
 ---
 
