@@ -43,6 +43,19 @@ export class PositionManager {
       return this.positions.get(signal.marketId)!;
     }
 
+    // Correlation cluster check: cap positions in the same thematic category
+    const openInCategory = [...this.positions.values()].filter(
+      (p) => p.status === "open" && p.category === signal.category
+    );
+    if (openInCategory.length >= config.CORRELATION_CLUSTER_MAX) {
+      log.warn("Correlation cluster cap hit — skipping", {
+        category: signal.category,
+        openCount: openInCategory.length,
+        cap: config.CORRELATION_CLUSTER_MAX,
+      });
+      return null;
+    }
+
     const sizing = kellySize(signal, this.bankrollUsd);
     if (sizing.dollarSize < 1) {
       log.debug("Position size too small — skipping", { size: sizing.dollarSize });
