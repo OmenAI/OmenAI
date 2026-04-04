@@ -9,6 +9,12 @@
 
 ---
 
+## Live Dashboard
+
+![Live bot dashboard](assets/preview-live.svg)
+
+Real-time view of Omen running: market scanner showing which markets pass or fail pre-filters, open positions with entry/current price and unrealized P&L, and the signal log with every decision Claude made and why.
+
 ## Kelly & Calibration
 
 ![Kelly criterion and calibration](assets/preview-kelly.svg)
