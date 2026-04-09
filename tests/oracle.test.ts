@@ -30,6 +30,7 @@ function makeSignal(overrides: Partial<MarketSignal> = {}): MarketSignal {
   return {
     marketId: "test-market-1",
     question: "Will BTC exceed $100k?",
+    category: "crypto",
     polymarketPct: 45,
     aiPct: 62,
     edgePct: 17,

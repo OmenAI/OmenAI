@@ -21,6 +21,7 @@ export function buildSignal(
   return {
     marketId: market.id,
     question: market.question,
+    category: market.category,
     polymarketPct: market.yesPrice * 100,
     aiPct,
     edgePct,

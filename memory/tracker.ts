@@ -88,11 +88,13 @@ export class PredictionTracker {
 
     const byCategory: AccuracyStats["byCategory"] = {};
     for (const r of resolved) {
-      if (!byCategory[r.category]) {
-        byCategory[r.category] = { total: 0, correct: 0, accuracy: 0 };
+      let bucket = byCategory[r.category];
+      if (!bucket) {
+        bucket = { total: 0, correct: 0, accuracy: 0 };
+        byCategory[r.category] = bucket;
       }
-      byCategory[r.category].total++;
-      if (r.correct) byCategory[r.category].correct++;
+      bucket.total++;
+      if (r.correct) bucket.correct++;
     }
     for (const cat of Object.values(byCategory)) {
       cat.accuracy = cat.total > 0 ? cat.correct / cat.total : 0;
