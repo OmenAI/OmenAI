@@ -54,7 +54,11 @@ export function kellySize(signal: MarketSignal, bankrollUsd: number, liquidityUs
   }
 
   // Fractional Kelly × confidence scaling
-  const adjusted = fullKelly * config.KELLY_FRACTION * signal.confidence;
+  const adjusted =
+    fullKelly *
+    config.KELLY_FRACTION *
+    signal.confidence *
+    (signal.calibrationPenalty ?? 1);
 
   // Cap at max single-trade risk
   const maxFraction = config.MAX_POSITION_PCT / 100;

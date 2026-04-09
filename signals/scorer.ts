@@ -1,10 +1,12 @@
+import { config } from "../lib/config.js";
 import type { Market, MarketSignal } from "../markets/types.js";
 
 export function buildSignal(
   market: Market,
   aiPct: number,
   confidence: number,
-  reasoning: string
+  reasoning: string,
+  calibrationPenalty = 1
 ): MarketSignal {
   // Use CLOB mid-price for edge calculation, not last-trade price.
   // Last trade can lag 8–12 minutes on thin books — mid-price reflects
@@ -14,7 +16,7 @@ export function buildSignal(
   const absEdge = Math.abs(edgePct);
 
   let recommendedSide: MarketSignal["recommendedSide"] = null;
-  if (absEdge >= 10) {
+  if (absEdge >= config.MIN_EDGE_PCT) {
     recommendedSide = edgePct > 0 ? "YES" : "NO";
   }
 
@@ -27,6 +29,7 @@ export function buildSignal(
     edgePct,
     recommendedSide,
     confidence,
+    calibrationPenalty,
     reasoning,
     scoredAt: Date.now(),
   };

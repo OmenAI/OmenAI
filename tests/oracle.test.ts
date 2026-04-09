@@ -36,6 +36,7 @@ function makeSignal(overrides: Partial<MarketSignal> = {}): MarketSignal {
     edgePct: 17,
     recommendedSide: "YES",
     confidence: 0.75,
+    calibrationPenalty: 1,
     reasoning: "Strong momentum and institutional adoption accelerating.",
     scoredAt: Date.now(),
     ...overrides,

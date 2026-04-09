@@ -73,15 +73,16 @@ async function runScanCycle(
         confidence: signal.confidence.toFixed(2),
       });
 
-      if (!config.DRY_RUN) {
-        const position = positions.open(signal);
-        if (position) positionsOpened++;
-      } else {
-        log.info("[DRY RUN] Would open position", {
-          side: signal.recommendedSide,
-          market: market.question.slice(0, 60),
-        });
+      const position = positions.open(signal);
+      if (position) {
         positionsOpened++;
+        if (config.DRY_RUN) {
+          log.info("[DRY RUN] Simulated paper position opened", {
+            side: signal.recommendedSide,
+            market: market.question.slice(0, 60),
+            sizeUsd: position.dollarSize,
+          });
+        }
       }
     }
   }
@@ -120,10 +121,10 @@ async function main() {
 
   const poly = new PolymarketClient();
   const analyzer = new MarketAnalyzer();
-  const newsFeed = new NewsFeed();
-  const oracle = new OracleAgent(newsFeed);
   const positions = new PositionManager();
   const tracker = new PredictionTracker();
+  const newsFeed = new NewsFeed();
+  const oracle = new OracleAgent(newsFeed, tracker);
 
   // Run first cycle immediately, then on interval
   await runScanCycle(poly, analyzer, oracle, positions, tracker);

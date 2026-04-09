@@ -5,6 +5,7 @@ import type { Market, MarketSignal } from "../markets/types.js";
 import { buildSignal } from "../signals/scorer.js";
 import { ORACLE_SYSTEM } from "./prompts.js";
 import type { NewsFeed } from "../feeds/news.js";
+import type { PredictionTracker } from "../memory/tracker.js";
 
 const log = createLogger("Oracle");
 
@@ -74,7 +75,10 @@ const TOOLS: Anthropic.Tool[] = [
 export class OracleAgent {
   private client: Anthropic;
 
-  constructor(private newsFeed: NewsFeed) {
+  constructor(
+    private newsFeed: NewsFeed,
+    private tracker: PredictionTracker
+  ) {
     this.client = new Anthropic({ apiKey: config.ANTHROPIC_API_KEY });
   }
 
@@ -119,11 +123,13 @@ export class OracleAgent {
               key_risks: string[];
             };
 
+            const calibrationPenalty = this.getCalibrationPenalty(market.category);
             signal = buildSignal(
               market,
               inp.yes_probability,
               inp.confidence,
-              `${inp.reasoning}\n\nKey risks: ${inp.key_risks.join("; ")}`
+              `${inp.reasoning}\n\nKey risks: ${inp.key_risks.join("; ")}`,
+              calibrationPenalty
             );
 
             results.push({
@@ -182,21 +188,34 @@ export class OracleAgent {
       }
 
       case "get_historical_accuracy": {
-        // Returns mock accuracy stats — in production, query prediction history
-        // Brier score per category drives the confidence penalty in Kelly sizing
+        const category = String(input["category"]);
+        const stats = this.tracker.getStats();
+        const categoryStats = stats.byCategory[category];
         return {
-          category: String(input["category"]),
-          totalPredictions: 47,
-          accuracy: 0.714,
-          avgEdge: 12.3,
-          brierScore: 0.18,
-          note: "Based on last 90 days of resolved markets",
+          category,
+          totalPredictions: categoryStats?.total ?? 0,
+          accuracy: categoryStats?.accuracy ?? 0,
+          avgEdge: stats.avgEdge,
+          brierScore: this.tracker.getBrierScore(category),
+          note:
+            (categoryStats?.total ?? 0) > 0
+              ? "Computed from resolved predictions in the local tracker"
+              : "No resolved prediction history yet for this category",
         };
       }
 
       default:
         return { error: `Unknown tool: ${name}` };
     }
+  }
+
+  private getCalibrationPenalty(category: string): number {
+    const brier = this.tracker.getBrierScore(category);
+    if (brier === 0) return 1;
+    if (brier > 0.25) return 0.6;
+    if (brier > 0.2) return 0.75;
+    if (brier > 0.15) return 0.9;
+    return 1;
   }
 }
 

@@ -31,6 +31,7 @@ export interface MarketSignal {
   edgePct: number;          // aiPct - polymarketPct
   recommendedSide: MarketOutcome | null;
   confidence: number;       // 0–1
+  calibrationPenalty: number;
   reasoning: string;
   scoredAt: number;
 }
