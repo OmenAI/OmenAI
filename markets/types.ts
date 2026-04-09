@@ -25,6 +25,7 @@ export interface Market {
 export interface MarketSignal {
   marketId: string;
   question: string;
+  category: string;
   polymarketPct: number;    // current Polymarket YES probability (0–100)
   aiPct: number;            // Omen's estimated YES probability (0–100)
   edgePct: number;          // aiPct - polymarketPct
@@ -40,6 +41,7 @@ export interface Position {
   id: string;
   marketId: string;
   question: string;
+  category: string;
   side: MarketOutcome;
   entryPrice: number;       // 0–1
   currentPrice: number;     // 0–1

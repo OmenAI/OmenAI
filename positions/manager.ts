@@ -71,6 +71,7 @@ export class PositionManager {
       id: `${signal.marketId}-${Date.now()}`,
       marketId: signal.marketId,
       question: signal.question,
+      category: signal.category,
       side: signal.recommendedSide,
       entryPrice,
       currentPrice: entryPrice,

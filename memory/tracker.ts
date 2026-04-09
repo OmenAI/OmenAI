@@ -75,7 +75,7 @@ export class PredictionTracker {
     if (resolved.length === 0) return 0;
     const sum = resolved.reduce((s, r) => {
       const forecast = r.aiPct / 100;
-      const outcome = r.resolvedYes ? 1 : 0;
+      const outcome = r.resolvedYes === true ? 1 : 0;
       return s + Math.pow(forecast - outcome, 2);
     }, 0);
     return sum / resolved.length;
