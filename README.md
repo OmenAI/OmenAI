@@ -23,6 +23,22 @@ Omen sizes every position using the Kelly criterion against a live Brier-calibra
 
 ---
 
+## Real Market Shapes
+
+Omen is designed around real Polymarket-style contract shapes, not invented meme prompts. Typical examples include:
+
+- `Peru Presidential Election Winner`
+- `What will WTI Crude Oil (WTI) hit in April 2026?`
+- `US x Iran permanent peace deal by April 30?`
+
+That matters because resolution logic, liquidity structure, and sizing discipline behave differently across:
+
+- multi-outcome election markets
+- range and target ladders
+- date-bounded geopolitical event contracts
+
+---
+
 ## How It Works
 
 ```
