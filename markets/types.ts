@@ -79,6 +79,7 @@ export interface ScanCycle {
   cycleId: string;
   startedAt: number;
   completedAt?: number;
+  durationMs?: number;
   marketsScanned: number;
   marketsFiltered: number;
   opportunitiesFound: number;

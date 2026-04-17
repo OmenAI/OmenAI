@@ -48,46 +48,57 @@ async function runScanCycle(
 
   // 4. Oracle analysis
   for (const { market, score } of scored) {
-    log.info("Analyzing", {
-      question: market.question.slice(0, 70),
-      score: score.toFixed(2),
-      yesPrice: (market.yesPrice * 100).toFixed(1) + "%",
-    });
-
-    const context = analyzer.buildContext(market);
-    const signal = await oracle.predict(market, context);
-
-    if (!signal) {
-      log.debug("No signal returned", { market: market.id });
-      continue;
-    }
-
-    tracker.record(signal, market.category);
-
-    if (signal.recommendedSide) {
-      opportunitiesFound++;
-      log.info("Opportunity found", {
-        question: market.question.slice(0, 60),
-        side: signal.recommendedSide,
-        edge: signal.edgePct.toFixed(1) + "%",
-        confidence: signal.confidence.toFixed(2),
+    try {
+      log.info("Analyzing", {
+        question: market.question.slice(0, 70),
+        score: score.toFixed(2),
+        yesPrice: (market.yesPrice * 100).toFixed(1) + "%",
       });
 
-      const position = positions.open(signal);
-      if (position) {
-        positionsOpened++;
-        if (config.DRY_RUN) {
-          log.info("[DRY RUN] Simulated paper position opened", {
-            side: signal.recommendedSide,
-            market: market.question.slice(0, 60),
-            sizeUsd: position.dollarSize,
-          });
+      const context = analyzer.buildContext(market);
+      const signal = await oracle.predict(market, context);
+
+      if (!signal) {
+        log.debug("No signal returned", { market: market.id });
+        continue;
+      }
+
+      tracker.record(signal, market.category);
+
+      if (signal.recommendedSide) {
+        opportunitiesFound++;
+        log.info("Opportunity found", {
+          question: market.question.slice(0, 60),
+          side: signal.recommendedSide,
+          edge: signal.edgePct.toFixed(1) + "%",
+          confidence: signal.confidence.toFixed(2),
+        });
+
+        const position = positions.open(signal);
+        if (position) {
+          positionsOpened++;
+          if (config.DRY_RUN) {
+            log.info("[DRY RUN] Simulated paper position opened", {
+              side: signal.recommendedSide,
+              market: market.question.slice(0, 60),
+              sizeUsd: position.dollarSize,
+            });
+          }
         }
       }
+    } catch (err) {
+      log.error("Market analysis failed", {
+        cycleId,
+        marketId: market.id,
+        question: market.question.slice(0, 60),
+        error: err instanceof Error ? err.message : String(err),
+      });
     }
   }
 
   const stats = tracker.getStats();
+  const completedAt = Date.now();
+  const durationMs = completedAt - startedAt;
   log.info("Cycle complete", {
     cycleId,
     scanned: markets.length,
@@ -95,14 +106,24 @@ async function runScanCycle(
     analyzed: scored.length,
     opportunities: opportunitiesFound,
     positionsOpened,
+    durationMs,
     accuracy: stats.resolved > 0 ? (stats.accuracy * 100).toFixed(1) + "%" : "n/a",
     bankroll: `$${positions.getBankroll().toFixed(2)}`,
   });
 
+  if (durationMs > config.SCAN_INTERVAL_MS) {
+    log.warn("Scan cycle exceeded configured interval", {
+      cycleId,
+      durationMs,
+      intervalMs: config.SCAN_INTERVAL_MS,
+    });
+  }
+
   return {
     cycleId,
     startedAt,
-    completedAt: Date.now(),
+    completedAt,
+    durationMs,
     marketsScanned: markets.length,
     marketsFiltered: filtered.length,
     opportunitiesFound,
@@ -126,16 +147,17 @@ async function main() {
   const newsFeed = new NewsFeed();
   const oracle = new OracleAgent(newsFeed, tracker);
 
-  // Run first cycle immediately, then on interval
-  await runScanCycle(poly, analyzer, oracle, positions, tracker);
-
-  setInterval(async () => {
+  const scheduleNextCycle = async () => {
     try {
       await runScanCycle(poly, analyzer, oracle, positions, tracker);
     } catch (err) {
       log.error("Scan cycle failed", { err });
+    } finally {
+      setTimeout(scheduleNextCycle, config.SCAN_INTERVAL_MS);
     }
-  }, config.SCAN_INTERVAL_MS);
+  };
+
+  await scheduleNextCycle();
 }
 
 main().catch((err) => {
