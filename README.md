@@ -11,15 +11,15 @@
 
 ## Live Dashboard
 
-![Live bot dashboard](assets/preview-live.svg)
+<img src="assets/preview-live.png" alt="Omen live prediction dashboard" width="100%" />
 
 Real-time view of Omen running: market scanner showing which markets pass or fail pre-filters, open positions with entry/current price and unrealized P&L, and the signal log with every decision Claude made and why.
 
-## Kelly & Calibration
+## Conviction Engine
 
-![Kelly criterion and calibration](assets/preview-kelly.svg)
+<img src="assets/preview-conviction.png" alt="Omen conviction engine" width="100%" />
 
-Omen sizes every position using the Kelly criterion against a live Brier-calibrated model. The reliability diagram shows per-category calibration (Crypto B=0.18, Protocol B=0.14, Political B=0.24). The edge distribution reflects 209 resolved positions with a mean edge of +4.2%.
+Omen turns market setup, evidence quality, historical calibration, liquidity, and bankroll constraints into one conviction score before sizing a position. The engine keeps edge, confidence, Kelly sizing, and exit risk visible instead of treating Claude's probability as a blind trade signal.
 
 ---
 
