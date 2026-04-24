@@ -8,11 +8,8 @@ export function buildSignal(
   reasoning: string,
   calibrationPenalty = 1
 ): MarketSignal {
-  // Use CLOB mid-price for edge calculation, not last-trade price.
-  // Last trade can lag 8–12 minutes on thin books — mid-price reflects
-  // current supply/demand and is the correct implied probability baseline.
-  const midPrice = (market.yesPrice + (1 - market.noPrice)) / 2;
-  const edgePct = aiPct - midPrice * 100;
+  const marketPct = market.yesPrice * 100;
+  const edgePct = aiPct - marketPct;
   const absEdge = Math.abs(edgePct);
 
   let recommendedSide: MarketSignal["recommendedSide"] = null;
@@ -24,7 +21,7 @@ export function buildSignal(
     marketId: market.id,
     question: market.question,
     category: market.category,
-    polymarketPct: market.yesPrice * 100,
+    polymarketPct: marketPct,
     aiPct,
     edgePct,
     recommendedSide,

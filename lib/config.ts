@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const TEST_ENV = process.env.NODE_ENV === "test" || process.env.VITEST === "true";
+
 const ConfigSchema = z.object({
   // Anthropic
   ANTHROPIC_API_KEY: z.string().min(1, "ANTHROPIC_API_KEY is required"),
@@ -43,7 +45,13 @@ const ConfigSchema = z.object({
 });
 
 function loadConfig() {
-  const result = ConfigSchema.safeParse(process.env);
+  const env = TEST_ENV
+    ? {
+        ANTHROPIC_API_KEY: "test-anthropic-key",
+        ...process.env,
+      }
+    : process.env;
+  const result = ConfigSchema.safeParse(env);
   if (!result.success) {
     console.error("[Config] Validation failed:", result.error.flatten().fieldErrors);
     process.exit(1);
